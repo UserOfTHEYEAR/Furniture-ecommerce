@@ -15,21 +15,19 @@ import com.example.furniture_ecommerce.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(path ="/users")
+@RequestMapping(path = "/users")
 @CrossOrigin(origins = "*")
 public class UserController {
 
-@Autowired
-private UserService userService;
+	@Autowired
+	private UserService userService;
 
-@PostMapping(path = "/register")
-public void createUser(@Valid @RequestBody UserRequestDto dto, BindingResult br) {
-	if(br.hasErrors()) {
-		throw new OurRuntimeException(br,"");
-		
-}
-userService.create(dto);
-}
-}
+	@PostMapping(path = "/register")
+	public void createUser(@Valid @RequestBody UserRequestDto dto, BindingResult br) {
+		if (br.hasErrors()) {
+			throw new OurRuntimeException(br, "");
 
-
+		}
+		userService.create(dto);
+	}
+}

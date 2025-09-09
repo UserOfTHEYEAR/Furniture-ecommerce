@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -17,7 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	
+	@Autowired
+	private AuthFilter authFilter;
 	 @Bean
 	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	        return http
@@ -32,7 +34,7 @@ public class SecurityConfig {
 	            		.authenticationEntryPoint((request,response,authException) -> {
 	            			response.sendError(HttpServletResponse.SC_UNAUTHORIZED); //401
 	            		}))
-	           
+	            .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
 	            .build();
 	    }
           

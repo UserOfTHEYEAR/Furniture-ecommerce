@@ -10,6 +10,7 @@ import com.example.furniture_ecommerce.entity.User;
 import com.example.furniture_ecommerce.exception.OurRuntimeException;
 import com.example.furniture_ecommerce.repository.UserRepository;
 import com.example.furniture_ecommerce.request.UserRequestDto;
+import com.example.furniture_ecommerce.utill.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtUtil jwtUtil;
 
 	public void create(UserRequestDto dto) {
 		Optional<User> byUsername = userRepository.findByUsername(dto.getUsername());
@@ -36,4 +38,11 @@ public class UserService {
 		userRepository.save(user);
 
 	}
+	public String login(UserRequestDto d) {
+		Optional<User> user = userRepository.findByUsername(d.getUsername());
+		if (!user. isPresent() || !passwordEncoder.matches(d.getPassword(), user.get().getPassword())) {
+			throw new OurRuntimeException(null, "Username or password is incorrect");
+		}
+		return jwtUtil.generateToken(user.get().getUsername());
 }
+	}

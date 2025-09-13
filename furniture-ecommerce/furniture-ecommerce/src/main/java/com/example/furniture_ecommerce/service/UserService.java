@@ -40,9 +40,15 @@ public class UserService {
 	}
 	public String login(UserRequestDto d) {
 		Optional<User> user = userRepository.findByUsername(d.getUsername());
-		if (!user. isPresent() || !passwordEncoder.matches(d.getPassword(), user.get().getPassword())) {
-			throw new OurRuntimeException(null, "Username or password is incorrect");
+		if (!user.isPresent() || !passwordEncoder.matches(d.getPassword(), user.get().getPassword())) {
+		throw new OurRuntimeException(null, "username or password incorrect");
 		}
-		return jwtUtil.generateToken(user.get().getUsername());
-}
+		return jwtUtil.generateToken(
+		user.get().getUsername(),
+		user.get().getName(),
+		user.get().getSurname(),
+		user.get().getEmail());
+
+		
+	}
 	}

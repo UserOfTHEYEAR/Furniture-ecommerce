@@ -1,5 +1,7 @@
 package com.example.furniture_ecommerce.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,4 +36,14 @@ public class UserController {
 	public String userLogin(@RequestBody UserRequestDto d) {
 	return userService. login(d);
 }
+	@GetMapping(path ="/profile")
+	public ResponseEntity<Map<String, String>>getUserProfile(@RequestHeader("Authorization") String token){
+	if (token.startsWith("Bearer")) {
+	token = token.substring(7);
+	}
+
+	Map<String, String> claims = jwtUtil.extractClaims(token);
+	return ResponseEntity.ok(claims);
+
+	}
 	}

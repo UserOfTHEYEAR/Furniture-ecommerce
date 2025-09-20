@@ -20,27 +20,21 @@ public class SecurityConfig {
 
 	@Autowired
 	private AuthFilter authFilter;
-	 @Bean
-	    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	        return http
-	            .csrf(csrf -> csrf.disable())
-	            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-	            .authorizeHttpRequests(auth -> auth
-	            	.requestMatchers(HttpMethod.OPTIONS, "/").permitAll()
-	            	.requestMatchers(HttpMethod.POST, "/users/register").permitAll()
-	                .anyRequest().authenticated()
-	            )
-	            .exceptionHandling(exc -> exc
-	            		.authenticationEntryPoint((request,response,authException) -> {
-	            			response.sendError(HttpServletResponse.SC_UNAUTHORIZED); //401
-	            		}))
-	            .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-	            .build();
-	    }
-          
+
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		return http.csrf(csrf -> csrf.disable())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/").permitAll()
+						.requestMatchers(HttpMethod.POST, "/users/register").permitAll().anyRequest().authenticated())
+				.exceptionHandling(exc -> exc.authenticationEntryPoint((request, response, authException) -> {
+					response.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
+				})).addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class).build();
+	}
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
-	
+
 	}
 }

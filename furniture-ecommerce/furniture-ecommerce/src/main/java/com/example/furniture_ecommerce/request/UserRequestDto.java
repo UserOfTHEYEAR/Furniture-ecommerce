@@ -13,24 +13,24 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRequestDto {
-private Integer id;
+	private Integer id;
 
-@NotNull
-@Size(min = 2,max =30,message = "name must be min 2, max 30 characters")
-private String name;
+	@NotNull
+	@Size(min = 2, max = 30, message = "name must be min 2, max 30 characters")
+	private String name;
 
-@NotNull
-@Size(min = 2,max = 30,message = "surname must be min 2, max 30 characters")
-private String surname;
+	@NotNull
+	@Size(min = 2, max = 30, message = "surname must be min 2, max 30 characters")
+	private String surname;
 
-@NotNull
-@Pattern(regexp = "[a-zA-Z]+@[a-z]+\\.[a-z]{2,4}")
-private String email;
+	@NotNull
+	@Pattern(regexp = "[a-zA-Z]+@[a-z]+\\.[a-z]{2,4}")
+	private String email;
 
-@NotNull
-private String username;
+	@NotNull
+	private String username;
 
-@NotNull
-private String password;
+	@NotNull
+	private String password;
 
 }

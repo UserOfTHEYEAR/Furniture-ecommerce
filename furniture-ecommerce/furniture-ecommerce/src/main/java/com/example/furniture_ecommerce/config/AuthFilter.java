@@ -12,7 +12,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
 import com.example.furniture_ecommerce.utill.JwtUtil;
 
 import jakarta.servlet.FilterChain;
@@ -23,32 +22,32 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class AuthFilter extends OncePerRequestFilter{
+public class AuthFilter extends OncePerRequestFilter {
 
-private final JwtUtil jwtUtil;
+	private final JwtUtil jwtUtil;
 
-@Override
-protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-throws ServletException, IOException {
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
 
-String authHeader = request.getHeader("Authorization");
-if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-chain.doFilter(request, response);
-return;
-}
-String token = authHeader.substring(7);
-String username = jwtUtil.extractUsername(token);
+		String authHeader = request.getHeader("Authorization");
+		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+			chain.doFilter(request, response);
+			return;
+		}
+		String token = authHeader.substring(7);
+		String username = jwtUtil.extractUsername(token);
 
-List<GrantedAuthority> authorities = new ArrayList<>();
+		List<GrantedAuthority> authorities = new ArrayList<>();
 
-if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-User userDetails = new User(username, "", authorities);
-UsernamePasswordAuthenticationToken authToken =
-new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-authToken. setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			User userDetails = new User(username, "", authorities);
+			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
+					userDetails.getAuthorities());
+			authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-SecurityContextHolder.getContext().setAuthentication(authToken);
-}
-chain.doFilter(request, response);
-}
+			SecurityContextHolder.getContext().setAuthentication(authToken);
+		}
+		chain.doFilter(request, response);
+	}
 }

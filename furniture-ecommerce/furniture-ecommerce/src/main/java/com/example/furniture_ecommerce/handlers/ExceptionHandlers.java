@@ -14,32 +14,30 @@ import com.example.furniture_ecommerce.Response.ExceptionResponse;
 import com.example.furniture_ecommerce.Response.ValidationResponse;
 import com.example.furniture_ecommerce.exception.OurRuntimeException;
 
-
-
 @RestControllerAdvice
 public class ExceptionHandlers {
 
-@ExceptionHandler
-@ResponseStatus(code = HttpStatus.BAD_REQUEST) //note:this means error 400 in post man
-public ExceptionResponse handle(OurRuntimeException exc) {
-ExceptionResponse response = new ExceptionResponse();
+	@ExceptionHandler
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST) // note:this means error 400 in post man
+	public ExceptionResponse handle(OurRuntimeException exc) {
+		ExceptionResponse response = new ExceptionResponse();
 
-BindingResult br = exc.getBr();
-if (br == null) {
+		BindingResult br = exc.getBr();
+		if (br == null) {
 
-}else {
-List<FieldError> fieldErrors = br.getFieldErrors();
-List<ValidationResponse> validations = new ArrayList<ValidationResponse>();
-for (FieldError fieldError : fieldErrors) {
-ValidationResponse validation = new ValidationResponse();
-validation.setField(fieldError.getField());
-validation. setDefaultMessage(fieldError.getDefaultMessage());
-validations.add(validation);
-}
-response.setValidations(validations);
-}
-response. setMessage(exc.getMessage());
-return response;
+		} else {
+			List<FieldError> fieldErrors = br.getFieldErrors();
+			List<ValidationResponse> validations = new ArrayList<ValidationResponse>();
+			for (FieldError fieldError : fieldErrors) {
+				ValidationResponse validation = new ValidationResponse();
+				validation.setField(fieldError.getField());
+				validation.setDefaultMessage(fieldError.getDefaultMessage());
+				validations.add(validation);
+			}
+			response.setValidations(validations);
+		}
+		response.setMessage(exc.getMessage());
+		return response;
 
+	}
 }
-} 
